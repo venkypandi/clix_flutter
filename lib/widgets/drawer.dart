@@ -21,7 +21,6 @@ class _ClixDrawerState extends State<ClixDrawer> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
   @override
   Widget build(BuildContext context) {
@@ -53,17 +52,20 @@ class _ClixDrawerState extends State<ClixDrawer> {
                   child: Column(
                     children: [
                       CircleAvatar(
-                        backgroundImage: NetworkImage(imageUrl),
+                        backgroundImage: AssetImage("assets/images/profile.jpeg"),
                         backgroundColor: Colors.white,
                         maxRadius: 50,
                       ),
                       SizedBox(
                         height: 15,
                       ),
-                      Text("SathishKumar Sats",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                      InkWell(
+                        onTap: () => Navigator.pushNamed(context, MyRoutes.profileRoute),
+                        child: Text("Venkatesh Pandian",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       )
                     ],

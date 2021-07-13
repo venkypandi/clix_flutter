@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
-                  "Mr. Sathishkumar",
+                  "Mr. Venkatesh",
                   textScaleFactor: 1.2,
                 ),
               ),

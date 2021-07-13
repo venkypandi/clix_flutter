@@ -3,6 +3,7 @@ import 'package:flutterdemo/pages/help_page.dart';
 import 'package:flutterdemo/pages/home_page.dart';
 import 'package:flutterdemo/pages/login_page.dart';
 import 'package:flutterdemo/pages/privacy_page.dart';
+import 'package:flutterdemo/pages/profile_page.dart';
 import 'package:flutterdemo/utils/routes.dart';
 
 void main(){
@@ -20,9 +21,10 @@ class MyApp extends StatelessWidget {
         "/": (context) => LoginPage(),
         MyRoutes.homeRoute: (context) => HomePage(),
         MyRoutes.webViewRoute: (context) => PrivacyPage(),
-        MyRoutes.helpRoute: (context) => HelpPage()
+        MyRoutes.helpRoute: (context) => HelpPage(),
+        MyRoutes.profileRoute: (context) => ProfilePage(),
       },
-      initialRoute: MyRoutes.homeRoute,
+      initialRoute: MyRoutes.profileRoute,
     );
   }
 }
