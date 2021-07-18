@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterdemo/utils/routes.dart';
 import 'package:flutterdemo/widgets/drawer.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
@@ -14,6 +15,7 @@ import 'package:carousel_slider/utils.dart';
 
 
 class HomePage extends StatefulWidget {
+
   @override
   _HomePageState createState() => _HomePageState();
   CarouselController buttonCarouselController = CarouselController();
@@ -21,8 +23,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final String name = "Venkatesh";
-  double _randomScore = 301;
+
   int _current = 0;
+
+  double randomValue(){
+    return (Random().nextInt(900) + 301).toDouble();
+  }
 
   String percentageModifier(double value) {
     final roundedValue = value.ceil().toInt().toString();
@@ -31,6 +37,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -40,9 +47,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: (){
-
-            },
+            onPressed: ()=>Navigator.pushNamed(context, MyRoutes.notifications),
             icon: Icon(
               Icons.notifications_none_outlined
             ),
@@ -139,12 +144,15 @@ class _HomePageState extends State<HomePage> {
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 15),
                                 child: Center(
-                                  child: Text(
-                                    "Pay Now",
-                                    textScaleFactor: 1.2,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.pinkAccent
+                                  child: InkWell(
+                                    onTap: ()=>Navigator.pushNamed(context, MyRoutes.paymentRoute),
+                                    child: Text(
+                                      "Pay Now",
+                                      textScaleFactor: 1.2,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.pinkAccent
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -198,20 +206,23 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Align(
                                 alignment: Alignment.centerRight,
-                                child: RichText(
-                                  text: TextSpan(
-                                      text: "View All",
-                                      style: TextStyle(
-                                          color: Colors.blueAccent
-                                      ),
-                                      children: [
-                                        WidgetSpan(
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                                            child: Icon(FontAwesome.right_open,size: 15,color: Colors.blueAccent,),
-                                          ),
+                                child: InkWell(
+                                  onTap: ()=>Navigator.pushNamed(context, MyRoutes.loanRoute),
+                                  child: RichText(
+                                    text: TextSpan(
+                                        text: "View All",
+                                        style: TextStyle(
+                                            color: Colors.blueAccent
                                         ),
-                                      ]
+                                        children: [
+                                          WidgetSpan(
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                                              child: Icon(FontAwesome.right_open,size: 15,color: Colors.blueAccent,),
+                                            ),
+                                          ),
+                                        ]
+                                    ),
                                   ),
                                 ),
                               ),
@@ -316,7 +327,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                       customWidths: CustomSliderWidths(progressBarWidth: 10)
                                   ),
-                                  initialValue: 850,
+                                  initialValue: 805,
                                   min: 300,
                                   max: 900,
 
@@ -330,7 +341,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   onPressed: (){
                                     setState(() {
-                                      _randomScore = (Random().nextInt(900) + 301).toDouble();
+                                      randomValue();
                                     });
                                   },
                                   child: Text(

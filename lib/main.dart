@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutterdemo/pages/help_page.dart';
 import 'package:flutterdemo/pages/home_page.dart';
 import 'package:flutterdemo/pages/login_page.dart';
+import 'package:flutterdemo/pages/my_loans_page.dart';
+import 'package:flutterdemo/pages/notification_page.dart';
+import 'package:flutterdemo/pages/payment_page.dart';
 import 'package:flutterdemo/pages/privacy_page.dart';
 import 'package:flutterdemo/pages/profile_page.dart';
 import 'package:flutterdemo/utils/routes.dart';
@@ -23,8 +26,11 @@ class MyApp extends StatelessWidget {
         MyRoutes.webViewRoute: (context) => PrivacyPage(),
         MyRoutes.helpRoute: (context) => HelpPage(),
         MyRoutes.profileRoute: (context) => ProfilePage(),
+        MyRoutes.paymentRoute: (context) => PaymentPage(),
+        MyRoutes.loanRoute: (context) => MyLoansPage(),
+        MyRoutes.notifications: (context) => NotificationPage()
       },
-      initialRoute: MyRoutes.profileRoute,
+      initialRoute: MyRoutes.loanRoute,
     );
   }
 }
