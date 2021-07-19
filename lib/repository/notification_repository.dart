@@ -27,7 +27,7 @@ class NotificationRepository{
 class NotificationApi{
 
   Future getNotificationData() async {
-    var notifications = await get(Uri.parse('https://run.mocky.io/v3/d37f41b4-b024-49b2-bfb9-a981f45a198e'));
+    var notifications = await get(Uri.parse('https://run.mocky.io/v3/2318291f-d47d-46f8-abe0-3dad2f018c86'));
 
     return notifications;
   }

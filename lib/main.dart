@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         MyRoutes.loanRoute: (context) => MyLoansPage(),
         MyRoutes.notifications: (context) => NotificationPage()
       },
-      initialRoute: MyRoutes.loanRoute,
+      initialRoute: MyRoutes.homeRoute,
     );
   }
 }

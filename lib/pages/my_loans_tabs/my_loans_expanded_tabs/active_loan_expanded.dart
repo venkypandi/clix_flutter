@@ -1,7 +1,16 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterdemo/models/loan_model.dart';
+import 'package:flutterdemo/utils/routes.dart';
 import 'package:flutterdemo/utils/utils.dart';
 import 'package:flutterdemo/widgets/custom_month_picker.dart';
+import 'package:ndialog/ndialog.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import '../../PDFScreen.dart';
 
 class ActiveLoanExpanded extends StatefulWidget {
 
@@ -12,16 +21,76 @@ class ActiveLoanExpanded extends StatefulWidget {
 }
 
 class _ActiveLoanExpandedState extends State<ActiveLoanExpanded> {
+  late bool isLoading;
+  bool _allowWriteFile=false;
   List<ActiveLoanModel> loans = [ActiveLoanModel(name: "Personal Loan", icon: "assets/images/save.png", status: "Active", amount: "25,00,000", emi: "54,550", tenure: "60 Months", dueDate: "7th May"),
     ActiveLoanModel(name: "Home Loan", icon: "assets/images/home.png", status: "Active", amount: "5,00,000", emi: "94,334", tenure: "120 Months", dueDate: "9th May"),
     ActiveLoanModel(name: "Business Loan", icon: "assets/images/offer.png", status: "Active", amount: "10,00,000", emi: "24,334", tenure: "60 Months", dueDate: "11th May"),];
   String selectedMonth = "JULY";
   final utils = Utils();
 
+  late String pdfUrl;
 
+  late Dio dio;
+  String progress="";
   @override
   void initState() {
     super.initState();
+    dio = Dio();
+    pdfUrl="https://www.cs.purdue.edu/homes/ayg/CS251/slides/chap2.pdf";
+  }
+
+  Future<String>getDirectoryPath() async
+  {
+    Directory appDocDirectory = await getTemporaryDirectory();
+
+    Directory directory= await new Directory(appDocDirectory.path+'/'+'dir').create(recursive: true);
+
+    return directory.path;
+  }
+
+  requestWritePermission() async {
+
+    if (await Permission.storage.request().isGranted) {
+      setState(() {
+
+        _allowWriteFile = true;
+
+      });
+    }else
+    {
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.storage,
+      ].request();
+    }
+
+
+  }
+
+  Future downloadFile(String url,path) async {
+    if(!_allowWriteFile)
+    {
+      requestWritePermission();
+    }
+    try{
+      ProgressDialog progressDialog=ProgressDialog(context,dialogTransitionType: DialogTransitionType.Bubble,title: Text("Downloading File"), message: null);
+
+      progressDialog.show();
+      await dio.download(url, path,onReceiveProgress: (rec,total){
+        setState(() {
+          isLoading=true;
+          progress=((rec/total)*100).toStringAsFixed(0)+"%";
+          progressDialog.setMessage(Text( "Dowloading $progress"));
+        });
+
+      });
+      progressDialog.dismiss();
+
+    }catch( e)
+    {
+
+      print(e.toString());
+    }
   }
 
   @override
@@ -57,7 +126,7 @@ class _ActiveLoanExpandedState extends State<ActiveLoanExpanded> {
     return Container(
       margin: EdgeInsets.only(left: 40, right: 30),
       child: ElevatedButton(onPressed: () {
-        Navigator.pushNamed(context, '/emiPayment');
+        Navigator.pushNamed(context, MyRoutes.paymentRoute);
       },
         child: ListTile(
           title: Container(margin: EdgeInsets.only(top: 0, bottom: 5),
@@ -179,8 +248,24 @@ class _ActiveLoanExpandedState extends State<ActiveLoanExpanded> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                utils.getDownloadsRow(['assets/images/certificate.png', 'assets/images/invoice.png', 'assets/images/marketing.png'], ['Interest Certificate', 'Account Statement',
-                  'EMI\nSchedule'], width),
+                InkWell(
+                  child: utils.getDownloadsRow(['assets/images/certificate.png', 'assets/images/invoice.png', 'assets/images/marketing.png'], ['Interest Certificate', 'Account Statement',
+                    'EMI\nSchedule'], width),
+                  onTap: (){
+                    getDirectoryPath().then((value){
+                      File f=File(value+"/interest.pdf");
+                      if(f.existsSync())
+                      {
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return PDFScreen(f.path);
+                        }));
+                        return;
+                      }
+                      downloadFile(pdfUrl, f.path);
+                    });
+
+                  },
+                ),
                 SizedBox(height: 20,),
                 utils.getDownloadsRow(['assets/images/script.png', 'assets/images/open_mail.png', 'assets/images/success.png'], ['Loan  Agreement', 'Welcome\nKit',
                   'Foreclosure Statement'], width),

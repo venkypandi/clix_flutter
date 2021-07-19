@@ -32,25 +32,26 @@ class _ClosedTabPageState extends State<ClosedTabPage> {
             child: Stack(
                 alignment: AlignmentDirectional.topCenter,
                 children: [
-                  SizedBox(height: 30,),
-                  Container(
-                    width: width * 0.9,
-                    // height: height* 0.4,
-                    child: Column(
-                      children: [
-                        Card(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                          color: isOpen ? Colors.grey[200] : Colors.white,
-                          elevation: 8,
-                          child: Stack(
-                            children: [
-                              utils.getStatusTag('CLOSED', isOpen),
-                              getClosedExpansionTile(width)
-                            ],
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      // height: height* 0.4,
+                      child: Column(
+                        children: [
+                          Card(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            color: isOpen ? Colors.grey[200] : Colors.white,
+                            elevation: 8,
+                            child: Stack(
+                              children: [
+                                utils.getStatusTag('CLOSED', isOpen),
+                                getClosedExpansionTile(width)
+                              ],
+                            ),
                           ),
-                        ),
-                        utils.getFootNote('* Click to Expand'),
-                      ],
+                          utils.getFootNote('* Click to Expand'),
+                        ],
+                      ),
                     ),
                   ),
                 ]

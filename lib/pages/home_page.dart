@@ -24,7 +24,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final String name = "Venkatesh";
 
-  int _current = 0;
+  late double _current;
+
+  @override
+  void initState() {
+    _current = 305;
+    super.initState();
+
+  }
+
 
   double randomValue(){
     return (Random().nextInt(900) + 301).toDouble();
@@ -327,7 +335,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                       customWidths: CustomSliderWidths(progressBarWidth: 10)
                                   ),
-                                  initialValue: 805,
+                                  initialValue: _current,
                                   min: 300,
                                   max: 900,
 
@@ -341,7 +349,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   onPressed: (){
                                     setState(() {
-                                      randomValue();
+                                      _current = (Random().nextInt(900) + 300).toDouble();
                                     });
                                   },
                                   child: Text(
