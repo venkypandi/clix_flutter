@@ -120,6 +120,7 @@ class _ClixDrawerState extends State<ClixDrawer> {
                   Icons.logout,
                   color: Colors.black,
                 ),
+                onTap: ()=>Navigator.popUntil(context,ModalRoute.withName(MyRoutes.loginRoute)),
                 title: Text(
                   "Logout",
                   textScaleFactor: 1.2,

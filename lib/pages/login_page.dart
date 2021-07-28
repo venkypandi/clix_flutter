@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterdemo/pages/otp_dialog_box.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -20,30 +21,33 @@ class _LoginPageState extends State<LoginPage> {
   bool lanFlag = false;
   final _formKey = GlobalKey<FormState>();
 
+  @override
+  void initState() {
+    super.initState();
+    requestWritePermission();
+
+  }
+
+  requestWritePermission() async {
+
+    Map<Permission, PermissionStatus> statuses = await [
+        Permission.location,
+        Permission.sms,
+        Permission.contacts,
+      ].request();
+
+
+  }
+
   validateButton(BuildContext context){
 
     if(_formKey.currentState!.validate()){
-      if(!numberFlag) {
-        setState(() {
-          numberFlag = true;
-        });
-      }else{
-        setState(() {
-          panFlag = true;
-        });
-      }
-      if(panFlag){
-        setState(() {
-          lanFlag = true;
-        });
-      }
       if(checkValue){
         setState(() {
           _showToast(context);
         });
 
       }
-
     }
 
 
@@ -58,12 +62,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
 
-  }
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -107,6 +106,8 @@ class _LoginPageState extends State<LoginPage> {
                           validator: (value){
                             if(value!.isEmpty){
                               return "Mobile number cannot be empty";
+                            }else {
+                              numberFlag = true;
                             }
 
                             return null;
@@ -126,6 +127,8 @@ class _LoginPageState extends State<LoginPage> {
                           validator: (value){
                             if(value!.isEmpty){
                               return "PAN number cannot be empty";
+                            }else {
+                              panFlag = true;
                             }
 
                             return null;
@@ -146,6 +149,8 @@ class _LoginPageState extends State<LoginPage> {
                           validator: (value){
                             if(value!.isEmpty){
                               return "LAN number cannot be empty";
+                            }else{
+                              lanFlag = true;
                             }
 
                             return null;
@@ -154,7 +159,6 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: "Enter your LAN number",
                               labelText: "LAN Number",
                               labelStyle: TextStyle(
-
                                   color: Colors.black
                               )
                           ),

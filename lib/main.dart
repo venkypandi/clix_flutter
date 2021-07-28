@@ -5,6 +5,7 @@ import 'package:flutterdemo/pages/login_page.dart';
 import 'package:flutterdemo/pages/my_loans_page.dart';
 import 'package:flutterdemo/pages/notification_page.dart';
 import 'package:flutterdemo/pages/payment_page.dart';
+import 'package:flutterdemo/pages/payment_success.dart';
 import 'package:flutterdemo/pages/privacy_page.dart';
 import 'package:flutterdemo/pages/profile_page.dart';
 import 'package:flutterdemo/utils/routes.dart';
@@ -21,14 +22,15 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.light,
       debugShowCheckedModeBanner:false,
       routes: {
-        "/": (context) => LoginPage(),
+        MyRoutes.loginRoute: (context) => LoginPage(),
         MyRoutes.homeRoute: (context) => HomePage(),
         MyRoutes.webViewRoute: (context) => PrivacyPage(),
         MyRoutes.helpRoute: (context) => HelpPage(),
         MyRoutes.profileRoute: (context) => ProfilePage(),
         MyRoutes.paymentRoute: (context) => PaymentPage(),
         MyRoutes.loanRoute: (context) => MyLoansPage(),
-        MyRoutes.notifications: (context) => NotificationPage()
+        MyRoutes.notifications: (context) => NotificationPage(),
+        MyRoutes.succesPayment: (context) => PaymentSuccessPage()
       },
       initialRoute: MyRoutes.homeRoute,
     );

@@ -40,13 +40,13 @@ class _ActiveLoanExpandedState extends State<ActiveLoanExpanded> {
     pdfUrl="https://www.cs.purdue.edu/homes/ayg/CS251/slides/chap2.pdf";
   }
 
-  Future<String>getDirectoryPath() async
+  Future<String> getDirectoryPath() async
   {
-    Directory appDocDirectory = await getTemporaryDirectory();
+    Directory appDocDirectory = await getApplicationDocumentsDirectory();
 
-    Directory directory= await new Directory(appDocDirectory.path+'/'+'dir').create(recursive: true);
+    // Directory directory= await new Directory(appDocDirectory.path+'/'+'dir').create(recursive: true);
 
-    return directory.path;
+    return appDocDirectory.path;
   }
 
   requestWritePermission() async {
@@ -80,6 +80,7 @@ class _ActiveLoanExpandedState extends State<ActiveLoanExpanded> {
         setState(() {
           isLoading=true;
           progress=((rec/total)*100).toStringAsFixed(0)+"%";
+          debugPrint(path.toString()+" downloaded");
           progressDialog.setMessage(Text( "Dowloading $progress"));
         });
 
@@ -253,14 +254,7 @@ class _ActiveLoanExpandedState extends State<ActiveLoanExpanded> {
                     'EMI\nSchedule'], width),
                   onTap: (){
                     getDirectoryPath().then((value){
-                      File f=File(value+"/interest.pdf");
-                      if(f.existsSync())
-                      {
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return PDFScreen(f.path);
-                        }));
-                        return;
-                      }
+                      File f=File("/storage/emulated/0/Download/clix.pdf");
                       downloadFile(pdfUrl, f.path);
                     });
 

@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutterdemo/pages/update_mobile_dialog.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -13,6 +16,70 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final ImagePicker _picker = ImagePicker();
+
+  }
+  XFile? _image = null;
+
+  getImageFromGallery() async{
+    print("image: $_image");
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    setState(() {
+
+      _image = image;
+    });
+    print("image: $_image");
+  }
+
+  getImageFromCamera() async{
+    print("image: $_image");
+    final image = await ImagePicker().pickImage(source: ImageSource.camera);
+    setState(() {
+
+      _image = image;
+    });
+    print("image: $_image");
+  }
+
+
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Photo Library'),
+                      onTap: () {
+                        getImageFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      getImageFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +115,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         radius: 80,
                         child: CircleAvatar(
                             radius: 75,
-                            foregroundImage: AssetImage("assets/images/profile.jpeg"),
+                            foregroundImage: _image != null? FileImage(File(_image!.path)) as ImageProvider : AssetImage("assets/images/profile.jpeg"),
                             backgroundColor: Colors.white,
                         )
                       ),
@@ -58,12 +125,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 60.0),
                         child: Center(
-                          child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 15,
-                            child: Icon(
-                              Icons.camera_alt_outlined,
-                              color: Colors.blue,
+                          child: InkWell(
+                            onTap: (){
+                              _showPicker(context);
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 15,
+                              child: Icon(
+                                Icons.camera_alt_outlined,
+                                color: Colors.blue,
+                              ),
                             ),
                           ),
                         ),

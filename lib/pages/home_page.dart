@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterdemo/models/dashboard_model.dart';
+import 'package:flutterdemo/repository/dashboard_repository.dart';
 import 'package:flutterdemo/utils/routes.dart';
 import 'package:flutterdemo/widgets/drawer.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
@@ -23,15 +25,22 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final String name = "Venkatesh";
-
+  late DashboardModel dashboardModel;
   late double _current;
+
+  getDashboardData() async {
+    DashboardRepository dashboardRepo = DashboardRepository(customerId: '10000000088888');
+    await dashboardRepo.getDashboardModelData();
+    dashboardModel = dashboardRepo.dashboardModel;
+  }
 
   @override
   void initState() {
     _current = 305;
     super.initState();
-
+    getDashboardData();
   }
+
 
 
   double randomValue(){
@@ -349,7 +358,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   onPressed: (){
                                     setState(() {
-                                      _current = (Random().nextInt(900) + 300).toDouble();
+                                      _current = (Random().nextInt(600) + 300).toDouble();
                                     });
                                   },
                                   child: Text(
@@ -417,7 +426,7 @@ class _HomePageState extends State<HomePage> {
                                 primary: Colors.pinkAccent,
                               ),
                               onPressed: (){
-
+                                Navigator.pushNamed(context, MyRoutes.webViewRoute,arguments: "https://apply.clix.capital/");
                               },
                               child: Text(
                                   "Apply Now"
@@ -433,45 +442,47 @@ class _HomePageState extends State<HomePage> {
               ),
               Padding(
                 padding: const EdgeInsets.all(15.0),
-                child: Stack(
-                  alignment: Alignment.topCenter,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Image.asset("assets/images/beach.jpg")
-                    ),
-                    Positioned(
-                      top: 10,
-                      child: Text(
-                        "Personal Loan for Travel",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white
-                        ),
+                child: Expanded(
+                  child: Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.asset("assets/images/beach.jpg")
                       ),
-                    ),
-                    Positioned(
-                      top: 40,
-                      child: Text(
-                        "Don't let lack of money dampen your wander-\nlust. Take that solo vacation, family holiday",
-                        style: TextStyle(
+                      Positioned(
+                        top: 10,
+                        child: Text(
+                          "Personal Loan for Travel",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
                             color: Colors.white
+                          ),
                         ),
-                        textAlign: TextAlign.center,
                       ),
-                    ),
-                    Positioned(
-                      right: 0,
-                      bottom: 0,
-                      child: Container(
-                        color: Colors.pinkAccent,
-                        width: 130,
-                        height: 20,
-                        child: Text("Pre Approved*",textAlign:TextAlign.center,style: TextStyle(color: Colors.white),),
-                      ) ,
-                    )
+                      Positioned(
+                        top: 40,
+                        child: Text(
+                          "Don't let lack of money dampen your wander-\nlust. Take that solo vacation, family holiday",
+                          style: TextStyle(
+                              color: Colors.white
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          color: Colors.pinkAccent,
+                          width: 130,
+                          height: 20,
+                          child: Text("Pre Approved*",textAlign:TextAlign.center,style: TextStyle(color: Colors.white),),
+                        ) ,
+                      )
 
-                  ],
+                    ],
+                  ),
                 ),
               )
 

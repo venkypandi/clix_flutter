@@ -43,6 +43,9 @@ dependencies:
   path_provider: ^2.0.2
   ndialog: ^4.1.0
   syncfusion_flutter_pdfviewer: ^19.2.47-beta
+  razorpay_flutter: ^1.2.7
+  flutter_native_splash: ^1.2.0
+  image_picker: ^0.8.2
 
 dev_dependencies:
   flutter_test:
@@ -88,3 +91,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_native_splash:
+  image: assets/images/clixhome1.png
+  color: "ffffff"

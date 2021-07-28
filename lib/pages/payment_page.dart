@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutterdemo/utils/routes.dart';
 import 'package:flutterdemo/utils/utils.dart';
 import 'package:flutterdemo/widgets/custom_radio_button.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({Key? key}) : super(key: key);
@@ -14,13 +17,59 @@ class _PaymentPageState extends State<PaymentPage> {
   final Utils utils = Utils();
   late int value;
   late int paymentValue;
+  late Razorpay _razorpay;
   bool checked= false;
 
   @override
   void initState() {
     super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     value= 1;
     paymentValue= 3;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _razorpay.clear();
+  }
+
+  void openCheckout() async {
+    var options = {
+      'key': 'rzp_test_bHCepd2H1k5E0F',
+      'amount': 5000,
+      'name': 'Venkatesh',
+      'description': 'Payment',
+      'prefill': {'contact': '8248663588', 'email': 'venkatesh@babindia.com'},
+      'external': {
+        'wallets': ['paytm']
+      }
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    Navigator.pushNamed(context, MyRoutes.succesPayment);
+    Fluttertoast.showToast(
+        msg: "SUCCESS: " + response.paymentId!);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    Fluttertoast.showToast(
+        msg: "Payment Failed");
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    Fluttertoast.showToast(
+      msg: "EXTERNAL_WALLET: " + response.walletName!,);
   }
 
   void setSelectedRadio(val){
@@ -258,7 +307,7 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget getPayButton(BuildContext context, double width, double height){
     return ElevatedButton(onPressed: () {
       if(paymentValue == 3){
-        // Navigator.pushNamed(context, RAZORPAY);
+        openCheckout();
       }
     },
       child: ListTile(
